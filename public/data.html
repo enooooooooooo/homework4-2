@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Insert</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    form {
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 500px;
+      box-shadow: 0 0 5px #cccccc;
+      border-radius: 4px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 95%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      border: 1px solid #cccccc;
+      font-size: 16px;
+    }
+
+    button[type="submit"] {
+      background-color: #008cba;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #005b82;
+    }
+
+    #log {
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 500px;
+      white-space: pre-wrap;
+      box-shadow: 0 0 5px #cccccc;
+      border-radius: 4px;
+    }
+
+    /* スタイルを追加した箇所 */
+    #app {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    #app button {
+      background-color: #008cba;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    #app button:hover {
+      background-color: #005b82;
+    }
+
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 80%;
+    }
+
+    th {
+      background-color: #008cba;
+      color: #ffffff;
+      padding: 10px;
+    }
+
+    td {
+      border: 1px solid #cccccc;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<form id="movies" >
+  <label for="date">Date</label>
+  <input type="text" id="date" name="date">
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name">
+  <label for="price">Price</label>
+  <input type="text" id="price" name="price">
+  <button type="submit">Submit</button>
+</form>
+
+<p id="log"></p>
+
+<div id="app">
+  <button id="showdata">顯示資料</button>
+  <table id="table"></table>
+</div>
+
+<script>
+  const btn = document.getElementById('showdata');
+  btn.addEventListener('click', handleSubmit);
+
+  async function handleSubmit() {
+    console.log("data");
+
+    const url = "http://localhost:3000/api"; // 資料傳送到的 URL
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+      });
+      const data = await response.json();
+      // 在這裡處理回應資料，例如顯示成功訊息或更新頁面內容
+      console.log("成功", data);
+
+      // 將回傳的資料 用 table 顯示
+      let table = document.getElementById('table');
+
+      let thead = document.createElement('thead');
+      let tbody = document.createElement('tbody');
+      let tr = document.createElement('tr');
+      // let th1 = document.createElement('th');
+      let th2 = document.createElement('th');
+      let th3 = document.createElement('th');
+      let th4 = document.createElement('th');
+      // th1.innerHTML = "id";
+      th2.innerHTML = "price";
+      th3.innerHTML = "date";
+      th4.innerHTML = "name";
+      // tr.appendChild(th1);
+      tr.appendChild(th2);
+      tr.appendChild(th3);
+      tr.appendChild(th4);
+      thead.appendChild(tr);
+      table.appendChild(thead);
+      for (let i = 0; i < data.length; i++) {
+        let tr = document.createElement('tr');
+        // let td1 = document.createElement('td');
+        let td2 = document.createElement('td');
+        let td3 = document.createElement('td');
+        let td4 = document.createElement('td');
+        // td1.innerHTML = data[i].id;
+        td2.innerHTML = data[i].price;
+        td3.innerHTML = data[i].date;
+        td4.innerHTML = data[i].name;
+        // tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tbody.appendChild(tr);
+      }
+      table.appendChild(tbody);
+      document.getElementById('table').appendChild(table);
+
+    } catch (error) {
+      // 在這裡處理錯誤，例如顯示錯誤訊息或者回滾操作
+      console.log("錯誤", error);
+    }
+  }
+
+</script>
+
+
+
+</body>
+</html>
